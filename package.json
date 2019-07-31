@@ -1,0 +1,44 @@
+{
+  "name": "redirector",
+  "version": "1.0.0",
+  "description": "URL redirection service used by seeleft.de magazine.",
+  "main": "dist/main.js",
+  "scripts": {
+    "dev:watch": "tsc-watch --onSuccess \"node . --debug\"",
+    "dev:lint": "echo \"Linting not yet implemented.\"",
+    "dev:build": "tsc",
+    "start": "node ."
+  },
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.org/seeleft/redirector"
+  },
+  "author": "Daniel Riegler",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/body-parser": "^1.17.0",
+    "@types/cors": "^2.8.5",
+    "@types/exit-hook": "^2.2.1",
+    "@types/express": "^4.17.0",
+    "@types/lodash": "^4.14.136",
+    "@types/moment": "^2.13.0",
+    "@types/mongodb": "^3.1.28",
+    "@types/node": "^12.6.8",
+    "@types/winston": "^2.4.4",
+    "tsc-watch": "^2.2.1",
+    "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "exit-hook": "^2.2.0",
+    "express": "^4.17.1",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "mongodb": "^3.3.0-beta2",
+    "toml": "^3.0.0",
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^3.10.0"
+  }
+}

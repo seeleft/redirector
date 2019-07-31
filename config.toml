@@ -1,0 +1,57 @@
+# HTTP server settings
+[http]
+
+    # Default path prefix of the http server
+    path = '/'
+
+    # Default path of the api
+    apiPath = '/api'
+
+    # Port of the http server
+    port = 5000
+
+    # Host of the http server
+    host = '127.0.0.1'
+
+    # HTTP redirect settings
+    [http.redirect]
+
+        # Redirect status code
+        status = 308
+
+        # Default redirection (empty key)
+        default = 'https://seeleft.de'
+
+    # Authorization settings
+    [http.authorization]
+
+        # Authorization header name to use
+        header = 'Authorization'
+
+        # Expected value of the authorization header
+        expect = ''
+
+        # Whitelisted request ip addresses; use ['*'] to allow requests from anywhere
+        whitelist = ['127.0.0.1']
+
+    # HTTP static file configuration
+    [http.static]
+
+        # Should static files be provided
+        enabled = true
+
+        # Default static file path
+        path = '/admin' #
+
+# Database setings
+[database]
+
+    # Type of the database
+    # Currently available: mongodb
+    type = ''
+
+    # Database connection uri
+    uri = ''
+
+    # Database options (optional)
+    options = {}
