@@ -44,7 +44,6 @@ init:
 install:
   # Update ubuntu packages
   - sh: sudo apt update
-  - sh: sudo apt upgrade -y
 
 # Build script
 build_script:
