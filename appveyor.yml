@@ -76,7 +76,7 @@ branches:
 
 # Skip commits containing [no-build]
 skip_commits:
-  message: /[no-build]/
+  message: /\[no-build\]/
   
   # Skip commits which are not needed to build
   files:
