@@ -1,0 +1,101 @@
+# This file is licensed under the MIT License and is part of the "redirector" project.
+# Copyright (c) 2019 Daniel Riegler
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+# Build version format
+version: 1.0.0#{build}
+
+# Limit max. simultaniously running jobs
+max_jobs: 1
+
+# Set image (os) to ubuntu 18.04
+image: 'Ubuntu1804'
+
+# Fetch repository as zip archivhe
+shallow_clone: true
+
+# Build configuration level
+configuration: Release
+
+# Initialization script
+init:
+  - sh: git config --global user.name "appveyor"
+  - sh: git config --global user.email "no-reply@seeleft.de"
+  - sh: git config --global core.autocrlf input
+
+# Installation script
+install:
+  # Update ubuntu packages
+  - sh: sudo apt update
+  # Install nodejs and npm
+  - sh: sudo apt install nodejs npm -y
+  # Install latest npm version
+  - sh: sudo npm install -g npm
+
+# Build script
+build_script:
+  # Install project dependencies
+  - sh: npm install
+  # Build project
+  - sh: npm run dev:build 
+
+# Deploy to *production* server
+deploy:
+  
+  # Upload files to production server via ftp
+  - provider: FTP
+    protocol: ftp|ftps|sftp
+    host: $env:PRODUCTION_SERVER
+    password: $env:PRODUCTION_SERVER_PASSWORD
+    folder: /home/redirector/
+    debug: true
+
+  # todo restart service remotly
+
+# Allow only the master branch
+branches:
+  only:
+    - master
+
+# Skip commits containing [no-build]
+skip_commits:
+  message: /[no-build]/
+  
+  # Skip commits which are not needed to build
+  files:
+    - LICENSE
+    - README.md
+    - gitignore
+    - static/*
+    - .idea/*
+    - config.toml
+    - java-retrofit-mappings/* # todo add java build automation too
+
+# Listen to build success
+on_success:
+  # push message to discord webhook
+  - ps: Invoke-RestMethod https://git.io/fj9CJ -o send.ps1
+  - ps: ./send.ps1 success $env:WEBHOOK_URL
+
+# Listen to build failure
+on_failure:
+  # push message to discord webhook
+  - ps: Invoke-RestMethod https://git.io/fj9CJ -o send.ps1
+  - ps: ./send.ps1 failure $env:WEBHOOK_URL

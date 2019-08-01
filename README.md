@@ -1,2 +1,2 @@
 ## redirector
-URL redirection service used by seeleft.de magazine
+URL redirection service used by seeleft.de magazine.
