@@ -44,11 +44,7 @@ init:
 install:
   # Update ubuntu packages
   - sh: sudo apt update
-  # Download and setup nvm
-  - sh: wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
-  - sh: source ~/.profile
-  # Install nodejs
-  - sh: sudo nvm install $env:NODE_VERSION
+  - sh: sudo apt upgrade -y
 
 # Build script
 build_script:
