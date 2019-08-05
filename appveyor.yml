@@ -20,13 +20,13 @@
 # SOFTWARE.
 
 # Build version format
-version: 1.0.0#{build}
+version: 1.0.{build}
 
 # Limit max. simultaniously running jobs
 max_jobs: 1
 
 # Set image (os) to ubuntu 18.04
-image: 'Ubuntu1804'
+image: Ubuntu1804
 
 # Fetch repository as zip archivhe
 shallow_clone: true
@@ -36,8 +36,17 @@ configuration: Release
 
 # Environment variables
 environment:
-  # Latest NodeJS version (LTS)
-  node_version: "10.16.1"
+  # discord webhook url
+  WEBHOOK_URL:
+    secure: cd8cUdDkyt6cCvNmVJ90gyx1ztAhhCes057alVsl+sNAnTlFl8VNRKcia9n6x2Y93jZ+gMI+n7ShmbZ42yvQf5ygBS8uMuYZhZfHX1uc2XtkyW9vPweiCmkTTXc9ncy0bK7YkJmhi0c59nq+ma/yqaHNuhQSKDrsc3xZbDv8N08=
+  # production server host
+  PRODUCTION_SERVER:
+    secure: x36TebNxALhl7utycXLBPg==
+  # production server password
+  PRODUCTION_SERVER_PASSWORD:
+    secure: zBZGnibq1AwcQb6cz9tGBw==
+  # nodejs version
+  NODE_VERSION: 10.16.1
 
 # Initialization script
 init:
@@ -50,7 +59,7 @@ install:
   # Update ubuntu packages
   - sh: sudo apt update
   # Update nodejs
-  - sh: nvm install $node_version
+  - sh: nvm install $env:NODE_VERSION
 
 # Output useful information
 test_script:
@@ -71,10 +80,8 @@ deploy:
   # Upload files to production server via ftp
   - provider: FTP
     protocol: ftp|ftps|sftp
-    host:
-      secure: $env:PRODUCTION_SERVER
-    password:
-      secure: $env:PRODUCTION_SERVER_PASSWORD
+    host: $env:PRODUCTION_SERVER
+    password: $env:PRODUCTION_SERVER_PASSWORD
     username: root
     folder: /home/redirector/
     debug: true
