@@ -46,7 +46,7 @@ environment:
   PRODUCTION_SERVER_PASSWORD:
     secure: zBZGnibq1AwcQb6cz9tGBw==
   # nodejs version
-  NODE_VERSION: 10.16.1
+  NODE_VERSION: 
 
 # Initialization script
 init:
