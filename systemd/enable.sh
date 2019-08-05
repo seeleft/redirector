@@ -19,10 +19,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+# Copy service file to first priority run-level
+sudo cp ./redirector.service /etc/systemd/system
+
 # Only run if service does not already exist
 if ! service --status-all | grep -Fq 'redirector'; then
-    # Copy service file to first priority run-level
-    sudo cp ./redirector.service /etc/systemd/system
     # Reload systemctl daemon
     sudo systemctl daemon-reload
     # Enable service

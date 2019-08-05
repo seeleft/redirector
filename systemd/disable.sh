@@ -23,8 +23,4 @@
 if service --status-all | grep -Fq 'redirector'; then
     # Disable service
     sudo service redirector disable
-    # Delete service
-    sudo rm /etc/systemd/system/redirector.service
-    # Reload systemctl daemon
-    sudo systemctl daemon-reload
 fi
