@@ -71,8 +71,10 @@ deploy:
   # Upload files to production server via ftp
   - provider: FTP
     protocol: ftp|ftps|sftp
-    host: $env:PRODUCTION_SERVER
-    password: $env:PRODUCTION_SERVER_PASSWORD
+    host:
+      secure: $env:PRODUCTION_SERVER
+    password:
+      secure: $env:PRODUCTION_SERVER_PASSWORD
     username: root
     folder: /home/redirector/
     debug: true
