@@ -65,7 +65,7 @@ deploy:
   
   # Upload files to production server via ftp
   - provider: FTP
-    protocol: ftp|ftps|sftp
+    protocol: sftp
     host:
       secure: x36TebNxALhl7utycXLBPg==
     username: root
