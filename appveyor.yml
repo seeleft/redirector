@@ -50,7 +50,7 @@ install:
   # Update ubuntu packages
   - sh: sudo apt update
   # Update nodejs
-  - ps: Update-NodeJsInstallation $env:node_version
+  - sh: nvm install $node_version
 
 # Output useful information
 test_script:
