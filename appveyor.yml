@@ -28,9 +28,6 @@ max_jobs: 1
 # Set image (os) to ubuntu 18.04
 image: Ubuntu1804
 
-# Fetch repository as zip archivhe
-shallow_clone: true
-
 # Build configuration level
 configuration: Release
 
