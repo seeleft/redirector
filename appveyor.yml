@@ -49,8 +49,8 @@ init:
 install:
   # Update ubuntu packages
   - sh: sudo apt update
-  # Install nodejs
-  - ps: Install-Product node $env:node_version
+  # Update nodejs
+  - ps: Update-NodeJsInstallation $env:node_version
 
 # Output useful information
 test_script:
