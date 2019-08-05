@@ -19,31 +19,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-[Unit]
-Name=redirector
-Description=URL redirection service used by seeleft.de magazine.
-# Required services to boot up before
-Requires=After=network.target mongod.service
-
-[Service]
-
-# Start command
-ExecStart=/usr/bin/npm start --prefix /opt/redirector
-
-# I know, running as root is not really clever... xD
-User=root
-
-# Restart options
-Restart=always
-RestartSec=3
-
-# Redirect log output
-StandardOutput=syslog
-StandardError=syslog
-SyslogIdentifier=redirector
-
-# Environment variables
-Environment=NODE_ENV=production
-
-[Install]
-WantedBy=multi-user.target
+# Only run if service does already exist
+if service --status-all | grep -Fq 'redirector'; then
+    # Disable service
+    sudo service redirector disable
+    # Delete service
+    sudo rm /etc/systemd/system/redirector.service
+    # Reload systemctl daemon
+    sudo systemctl daemon-reload
+fi
