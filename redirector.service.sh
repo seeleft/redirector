@@ -20,7 +20,7 @@
 # SOFTWARE.
 
 # Only run if service does not already exist
-if ! [ service --status-all | grep -Fq 'redirector' ]; then
+if ! service --status-all | grep -Fq 'redirector'; then
     # Copy service file to first priority run-level
     sudo cp ./redirector.service /etc/systemd/system
     # Reload systemctl daemon
