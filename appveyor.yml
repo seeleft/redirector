@@ -68,7 +68,7 @@ deploy:
     protocol: ftp|ftps|sftp
     host:
       secure: x36TebNxALhl7utycXLBPg==
-    user: root
+    username: root
     password:
       secure: zBZGnibq1AwcQb6cz9tGBw==
     folder: /home/redirector/
