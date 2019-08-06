@@ -21,7 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# Helper script for the redirector project (https://github.com/seeleft/redirector)
+# Helper script for the redirector project
 # This script can create redirects via a simple CLI
 
 # Example:

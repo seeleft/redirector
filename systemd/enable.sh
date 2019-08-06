@@ -19,6 +19,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+# This helper script enables the systemd service for the redirector project
+
 # Copy service file to first priority run-level
 sudo cp ./redirector.service /etc/systemd/system
 
