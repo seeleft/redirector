@@ -7,9 +7,13 @@
 > ### This project is in **very early** development, so don't expect great or even rely on it in production use.
 > ### Furthermore was this piece of software originally written in aid of the [seeleft.de magazine](https://seeleft.de) and was **never meant to be opensourced**.
 
+---
+
 > ## 💿 Prerequisites
 > - [NodeJS](https://nodejs.org) >= 6.0 and [npm](https://www.npmjs.com)
-> - A [MongoDB](https://www.mongodb.com) database (you can get one completly **free** at [devstorage.eu](https://panel.devstorage.eu)
+> - A [MongoDB](https://www.mongodb.com) database (you can get one completly **free** at [devstorage.eu](https://panel.devstorage.eu))
+
+---
 
 > ## 📲 Installation
 > ### Build from source (bleeding edge)
@@ -26,6 +30,8 @@
 > - Edit `config.toml` to your needs
 > - Start the server: `npm start`
 
+---
+
 > ## 🛠️ Development setup
 > - Install [git](https://git-scm.com) if not already done
 > - Click [here](https://github.com/seeleft/redirector/fork) to fork the repository
@@ -33,6 +39,8 @@
 > - Clone the forked repository: `git clone https://github.com/{YOUR GITHUB NAME}/redirector.git`
 > - Install dependencies: `npm install`
 > - Make your changes to the sourcecode and submit a pull request
+
+---
 
 > ## ⚙️ Configuration "crash-course"
 > - Config file under `./config.toml`
