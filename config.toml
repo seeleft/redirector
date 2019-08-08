@@ -50,7 +50,7 @@
         header = 'Authorization'
 
         # Expected value of the authorization header
-        expect = ''
+        expect = 'YOUR_SAFE_PASSWORD'
 
         # Whitelisted request ip addresses; use ['*'] to allow requests from anywhere
         whitelist = ['127.0.0.1']
@@ -59,10 +59,10 @@
     [http.static]
 
         # Should static files be provided
-        enabled = true
+        enabled = false
 
         # Default static file path
-        path = '/admin' #
+        path = '/'
 
 # Database setings
 [database]
