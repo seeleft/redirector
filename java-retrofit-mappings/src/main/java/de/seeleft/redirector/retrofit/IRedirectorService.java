@@ -38,7 +38,7 @@ import retrofit2.http.*;
  * @since 1.0
  */
 @SuppressWarnings("unused")
-public interface IRedirector
+public interface IRedirectorService
 {
 
     /** version of the framework */
@@ -70,20 +70,20 @@ public interface IRedirector
     Call<RedirectorResponse> delete(final @NonNull @Path("key") String key);
 
     /**
-     * Helper method used to setup {@link Retrofit} and create the {@link IRedirector} mappings
+     * Helper method used to setup {@link Retrofit} and create the {@link IRedirectorService} mappings
      *
      * @param interceptor - the {@link AuthorizationInterceptor} to use
-     * @param baseUrl     - the url of the redirector instance (default: {@link IRedirector#DEFAULT_BASE_URL})
+     * @param baseUrl     - the url of the redirector instance (default: {@link IRedirectorService#DEFAULT_BASE_URL})
      *
-     * @return - the {@link IRedirector} mappings
+     * @return - the {@link IRedirectorService} mappings
      */
-    static IRedirector create(final @NonNull AuthorizationInterceptor interceptor, final String baseUrl)
+    static IRedirectorService create(final @NonNull AuthorizationInterceptor interceptor, final String baseUrl)
     {
         return new Retrofit.Builder().
                 baseUrl(null != baseUrl ? baseUrl : Constants.URL).
                 client(interceptor.okhttp(new OkHttpClient())).
                 validateEagerly(true).build().
-                create(IRedirector.class);
+                create(IRedirectorService.class);
     }
 
 }
