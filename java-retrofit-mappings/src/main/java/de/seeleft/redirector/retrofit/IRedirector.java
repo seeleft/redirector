@@ -34,6 +34,7 @@ import retrofit2.http.*;
 /**
  * Retrofit2 mappings for the redirector's http/rest endpoints
  *
+ * @author Daniel Riegler
  * @since 1.0
  */
 @SuppressWarnings("unused")
