@@ -40,22 +40,11 @@ import retrofit2.http.*;
 public interface IRedirector
 {
 
-    /** default url of the redirector instance */
-    String DEFAULT_BASE_URL = Constants.URL;
-
     /** version of the framework */
     String VERSION = Constants.VERSION;
 
     /** version of the {@link Retrofit} framework */
     String RETROFIT_VERSION = Constants.RETROFIT_VERSION;
-
-    /**
-     * Tests the API availibility
-     *
-     * @return {@link Call<RedirectorResponse>}
-     */
-    @GET
-    Call<RedirectorResponse> test();
 
     /**
      * Creates or updates an existing redirect
@@ -66,7 +55,7 @@ public interface IRedirector
      * @return {@link Call<RedirectorResponse>}
      * TODO: change url to body part: location
      */
-    @POST("/{key}")
+    @POST("/create/{key}")
     Call<RedirectorResponse> create(final @NonNull @Body String url, final @NonNull @Path("key") String key);
 
     /**
@@ -76,7 +65,7 @@ public interface IRedirector
      *
      * @return {@link Call<RedirectorResponse>}
      */
-    @DELETE("/{key}")
+    @DELETE("/delete/{key}")
     Call<RedirectorResponse> delete(final @NonNull @Path("key") String key);
 
     /**
@@ -90,7 +79,7 @@ public interface IRedirector
     static IRedirector create(final @NonNull AuthorizationInterceptor interceptor, final String baseUrl)
     {
         return new Retrofit.Builder().
-                baseUrl(null != baseUrl ? baseUrl : DEFAULT_BASE_URL).
+                baseUrl(null != baseUrl ? baseUrl : Constants.URL).
                 client(interceptor.okhttp(new OkHttpClient())).
                 validateEagerly(true).build().
                 create(IRedirector.class);

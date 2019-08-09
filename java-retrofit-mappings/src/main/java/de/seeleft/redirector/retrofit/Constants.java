@@ -60,7 +60,7 @@ final class Constants
         }
 
         // assign properties
-        URL = properties.getProperty("url", "https://seeleft.de/go/api/");
+        URL = properties.getProperty("url", "https://seeleft.de/go/api/v1/");
         RETROFIT_VERSION = properties.getProperty("retrofit.version",
                 Retrofit.class.getPackage().getImplementationVersion());
         VERSION = properties.getProperty("version",

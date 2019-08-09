@@ -23,6 +23,7 @@
 
 import cors from 'cors'
 import Toml from 'toml'
+import Path from 'path'
 import moment from 'moment'
 import Lodash from 'lodash'
 import FileSystem from 'fs'
@@ -128,11 +129,8 @@ DatabaseFactory.of(config.database.type, config.database.uri, config.database.op
             next()
     })
 
-    // default get api endpoint; ping to validate that the api is up and running
-    api.get('/', (request, response) => result(response))
-
     // handle incoming post requests (create redirects)
-    api.post('/:key*?', (request, response) => {
+    api.post('/create/:key*?', (request, response) => {
         const key: string = request.params.key
         const location: string = request.body.location
         if (!key)
@@ -156,7 +154,7 @@ DatabaseFactory.of(config.database.type, config.database.uri, config.database.op
     })
 
     // handle incoming delete requests (delete redirects)
-    api.delete('/:key*?', (request, response) => {
+    api.delete('/delete/:key*?', (request, response) => {
         const key: string = request.params.key
         if (!key) result(response, new Error('Missing key in path.'))
         else database.delete(request.params.key)
@@ -165,7 +163,7 @@ DatabaseFactory.of(config.database.type, config.database.uri, config.database.op
     })
 
     // add api router to express
-    application.use(config.http.apiPath, api)
+    application.use(Path.join(config.http.apiPath, '/v1'), api)
 
     // handle default get requests
     application.get('/:key*?', (request, response) => {

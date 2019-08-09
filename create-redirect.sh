@@ -26,7 +26,7 @@
 
 # Example:
 # chmod +x create-redirect.sh
-# ./create-redirect.sh \ 
+# ./create-redirect.sh \
 #       --LOCATION https://google.com \
 #       --KEY test \
 #       --WORKDIR /home/redirector
@@ -39,11 +39,11 @@ STOML_MIRROR="https://github.com/freshautomations/stoml/releases/download/v0.3.0
 # parse arguments
 # adopted from: https://unix.stackexchange.com/questions/129391/passing-named-arguments-to-shell-scripts
 while [ $# -gt 0 ]; do
-     if [[ $1 == *"--"* ]]; then
-       v="${1/--/}"
-       declare $v="$2"
-     fi
-    shift
+  if [[ $1 == *"--"* ]]; then
+    v="${1/--/}"
+    declare $v="$2"
+  fi
+  shift
 done
 
 # check for location argument
@@ -88,12 +88,12 @@ if ! dpkg -s "nodejs" >/dev/null 2>&1; then
 fi
 
 # export neccessary config values via stoml
-export HOST=`$STOML_PATH $CONFIG http.host`
-export PORT=`$STOML_PATH $CONFIG http.port`
-export PATH=`$STOML_PATH $CONFIG http.path`
-export API_PATH=`$STOML_PATH $CONFIG http.apiPath`
-export AUTH_HEADER=`$STOML_PATH $CONFIG http.authorization.header`
-export AUTH_EXPECT=`$STOML_PATH $CONFIG http.authorization.expect`
+export HOST=$($STOML_PATH $CONFIG http.host)
+export PORT=$($STOML_PATH $CONFIG http.port)
+export PATH=$($STOML_PATH $CONFIG http.path)
+export API_PATH=$($STOML_PATH $CONFIG http.apiPath)
+export AUTH_HEADER=$($STOML_PATH $CONFIG http.authorization.header)
+export AUTH_EXPECT=$($STOML_PATH $CONFIG http.authorization.expect)
 
 # remove trailing slash from path
 if [[ "$PATH" == */ ]]; then
@@ -101,17 +101,19 @@ if [[ "$PATH" == */ ]]; then
 fi
 
 # build request url
-REQUEST_URL="http://$HOST:$PORT$PATH$API_PATH/$KEY"
+REQUEST_URL="http://$HOST:$PORT$PATH$API_PATH/create/$KEY"
 
 printf "Request url is %s.\n" "$REQUEST_URL"
 
 # send request to server
-RESPONSE=$(/usr/bin/curl -s \
-        -d '{"location":"'"$LOCATION"'"}' \
-        -H "Accept: application/json" \
-        -H "Content-Type: application/json" \
-        -H "$AUTH_HEADER: $AUTH_EXPECT" \
-        -X POST $REQUEST_URL)
+RESPONSE=$(
+  /usr/bin/curl -s \
+  -d '{"location":"'"$LOCATION"'"}' \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -H "$AUTH_HEADER: $AUTH_EXPECT" \
+  -X POST $REQUEST_URL
+)
 
 # check if response was sent
 if [ -z "$RESPONSE" ]; then
@@ -120,7 +122,7 @@ if [ -z "$RESPONSE" ]; then
 else
   # parse and print response via nodejs
   RESPONSE="$RESPONSE" /usr/bin/node -e \
-  "\
+  "
          const response = JSON.parse(process.env.RESPONSE)
          if(!response.success)
          {
@@ -128,6 +130,6 @@ else
             process.exit(1)
          }
          else
-            process.stdout.write('\x1b[32mSuccesfully created the redirect \"$KEY\" for $LOCATION.\n\x1b[0m')\
+            process.stdout.write('\x1b[32mSuccesfully created the redirect \"$KEY\" for $LOCATION.\n\x1b[0m')
   "
 fi
