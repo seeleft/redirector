@@ -34,6 +34,7 @@ import java.util.Properties;
 /**
  * Constants class which gets its properties from a classpath meta file
  *
+ * @author Daniel Riegler
  * @since 1.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

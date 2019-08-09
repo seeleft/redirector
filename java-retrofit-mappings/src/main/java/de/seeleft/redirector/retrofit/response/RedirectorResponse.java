@@ -29,6 +29,7 @@ import lombok.experimental.Accessors;
 /**
  * Redirector response body
  *
+ * @author Daniel Riegler
  * @since 1.0
  */
 @Data

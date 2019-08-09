@@ -37,6 +37,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Utility responsible for adding authentication to retrofit's underlaying okhttp client
  *
+ * @author Daniel Riegler
  * @since 1.0
  */
 @AllArgsConstructor
