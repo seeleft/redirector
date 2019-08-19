@@ -37,8 +37,8 @@ if ! test -f "$CONFIG_FILE"; then
   printf "\e[33mCould not find default config file at %s, don't backing it up...\n\e[0m" "$CONFIG_FILE"
 else
   cp $CONFIG_FILE $CONFIG_BACKUP
-  DATE=$(date '+%Y-%m-%d %H:%M:%S')
-  awk 'NR==1{print "# '"$DATE"'\n"}-1' $CONFIG_BACKUP >>$CONFIG_BACKUP
+  #DATE=$(date '+%Y-%m-%d %H:%M:%S')
+  #awk 'NR==1{print "# '"$DATE"'\n"}-1' $CONFIG_FILE >>$CONFIG_BACKUP
   printf "\e[32mBacked up config from %s at %s.\n\e[0m" "$CONFIG_FILE" "$CONFIG_BACKUP"
 fi
 
