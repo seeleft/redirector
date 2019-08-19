@@ -71,7 +71,7 @@ build_script:
 
 # Deploy to *production* server
 deploy:
-  #todo implement deployment
+  # todo implement deployment
 
 # Allow only the master branch
 branches:
