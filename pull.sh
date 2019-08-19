@@ -47,7 +47,7 @@ git pull
 # restore config backup
 if test -f "$CONFIG_BACKUP"; then
   sudo cp $CONFIG_BACKUP $CONFIG_FILE
-  printf "\e[32mRestored config backup from %s to %s\n\e[0m." "$CONFIG_BACKUP" "$CONFIG_FILE"
+  printf "\e[32mRestored config backup from %s to %s.\n\e[0m" "$CONFIG_BACKUP" "$CONFIG_FILE"
 fi
 
 # chmod all sh files
