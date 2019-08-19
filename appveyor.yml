@@ -33,6 +33,18 @@ configuration: Release
 
 # Environment variables
 environment:
+  # nodejs version
+  NODE_VERSION: 10.16.1
+  # production server host
+  PROD_HOST:
+    secure: x36TebNxALhl7utycXLBPg==
+  # production server password
+  PROD_PASSWORD:
+    secure: zBZGnibq1AwcQb6cz9tGBw==
+  # production server user
+  PROD_USER: root
+  # production server workdirectory
+  PROD_DIR: /opt/redirector
   # discord webhook url
   WEBHOOK_URL:
     secure: cd8cUdDkyt6cCvNmVJ90gyx1ztAhhCes057alVsl+sNAnTlFl8VNRKcia9n6x2Y93jZ+gMI+n7ShmbZ42yvQf5ygBS8uMuYZhZfHX1uc2XtkyW9vPweiCmkTTXc9ncy0bK7YkJmhi0c59nq+ma/yqaHNuhQSKDrsc3xZbDv8N08==
@@ -48,30 +60,18 @@ install:
   # Update ubuntu packages
   - sh: sudo apt update
   # Update nodejs to 10.16.1 LTS
-  - sh: nvm install 10.16.1
+  - sh: nvm install $env:NODE_VERSION
 
 # Build script
 build_script:
   # Install project dependencies
   - sh: npm install
   # Build project
-  - sh: npm run dev:build 
+  - sh: npm run dev:build
 
 # Deploy to *production* server
 deploy:
-  
-  # Upload files to production server via ftp
-  - provider: FTP
-    protocol: sftp
-    host:
-      secure: x36TebNxALhl7utycXLBPg==
-    username: root
-    password:
-      secure: zBZGnibq1AwcQb6cz9tGBw==
-    folder: /home/redirector/
-    debug: true
-
-  # todo restart service remotly
+  #todo implement deployment
 
 # Allow only the master branch
 branches:
@@ -81,7 +81,7 @@ branches:
 # Skip commits containing [no-build]
 skip_commits:
   message: /\[no-build\]/
-  
+
   # Skip commits which are not needed to build
   files:
     - LICENSE

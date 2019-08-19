@@ -4,13 +4,6 @@
     <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/java-retrofit-mappings/docs" />
     <option name="OPTION_SCOPE" value="public" />
   </component>
-  <component name="MavenProjectsManager">
-    <option name="originalFiles">
-      <list>
-        <option value="$PROJECT_DIR$/java-retrofit-mappings/pom.xml" />
-      </list>
-    </option>
-  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>

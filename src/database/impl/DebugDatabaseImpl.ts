@@ -28,32 +28,31 @@ export default class DebugDatabaseImpl implements IDatabase {
 
     private readonly redirects: Map<string, Redirect> = new Map()
 
-    connect(uri: string, options: any): Promise<IDatabase> {
-        // nothing to do here
-        return Promise.resolve(this)
-    }
+    // nothing to do here
+    connect = (uri: string, options: any): Promise<IDatabase> => Promise.resolve(this)
 
-    delete(key: string): Promise<void> {
+
+    delete = (key: string): Promise<void> => {
         if (this.redirects.delete(key))
             return Promise.resolve()
         else
             return Promise.reject(new Error(`No entry found for key '${key}'.`))
     }
 
-    find(key: string): Promise<Redirect> {
+    find = (key: string): Promise<Redirect> => {
         const redirect: Redirect | undefined = this.redirects.get(key)
         if (!redirect)
             return Promise.reject(new Error(`No entry found for key '${key}'.`))
         return Promise.resolve(redirect)
     }
 
-    insert(redirect: Redirect): Promise<void> {
+    insert = (redirect: Redirect): Promise<void> => {
         this.redirects.set(redirect.key(), redirect)
         return Promise.resolve()
     }
 
-    close(): void {
+    close = (): void => {
         // nothing to do here
     }
-
 }
+

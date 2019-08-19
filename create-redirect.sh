@@ -47,20 +47,20 @@ while [ $# -gt 0 ]; do
 done
 
 # check for location argument
-if [ -z "$LOCATION" ]; then
+if test -z "$LOCATION"; then
   printf "\e[31mMissing neccessary argument: --LOCATION <url>\n\e[0m"
   exit 1
 fi
 
 # check for key argument; generate random one if unset
 # adopted from: https://gist.github.com/earthgecko/3089509
-if [ -z "$KEY" ]; then
+if test -z "$KEY"; then
   declare "KEY"=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 6 | head -n 1)
   printf "\e[33mMissing argument: --KEY <string> but generated \"%s\"\n\e[0m" "$KEY"
 fi
 
 # set default workdir
-if [ -z "$WORKDIR" ]; then
+if test -z "$WORKDIR"; then
   declare "WORKDIR"="/opt/redirector"
   printf "\e[33mMissing argument: --WORKDIR <path> but trying to use default one (%s).\n\e[0m" "$WORKDIR"
 fi
@@ -101,7 +101,7 @@ if [[ "$PATH" == */ ]]; then
 fi
 
 # build request url
-REQUEST_URL="http://$HOST:$PORT$PATH$API_PATH/create/$KEY"
+REQUEST_URL="http://$HOST:$PORT$PATH$API_PATH/v1/create/$KEY"
 
 printf "Request url is %s.\n" "$REQUEST_URL"
 
