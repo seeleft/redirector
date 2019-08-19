@@ -36,7 +36,7 @@ export default class MongoDatabaseImpl implements IDatabase {
     private collection?: Collection
 
     connect = (uri: string, options: any): Promise<IDatabase> => new Promise((resolve, reject) => {
-        MongoClient.connect(uri, options, (error, client) => {
+        MongoClient.connect(uri, {useNewUrlParser: true}, (error, client) => {
             if (error)
                 reject(error)
             else {
