@@ -32,6 +32,12 @@ if ! dpkg -s "git" >/dev/null 2>&1; then
   sudo apt install git -y
 fi
 
+# check for nodejs and install it if not already installed
+if ! dpkg -s "nodejs" >/dev/null 2>&1; then
+  printf "\e[33mCould not find nodejs, trying to install it...\n\e[0m"
+  sudo apt install nodejs -y
+fi
+
 # backup config
 if ! test -f "$CONFIG_FILE"; then
   printf "\e[33mCould not find default config file at %s, don't backing it up...\n\e[0m" "$CONFIG_FILE"
@@ -51,6 +57,9 @@ if test -f "$CONFIG_BACKUP"; then
   sudo cp $CONFIG_BACKUP $CONFIG_FILE
   printf "\e[32mRestored config backup from %s to %s.\n\e[0m" "$CONFIG_BACKUP" "$CONFIG_FILE"
 fi
+
+# build sources
+npm run dev:build
 
 # chmod all sh files
 chmod +x ./*.sh ./**/*.sh
