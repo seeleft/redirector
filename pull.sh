@@ -33,10 +33,15 @@ if ! dpkg -s "git" >/dev/null 2>&1; then
 fi
 
 # backup config
-if ! test -f "$CONFIG_FILE"; then
+if ! test -f $CONFIG_FILE; then
   printf "\e[33mCould not find default config file at %s, don't backing it up...\n\e[0m" "$CONFIG_FILE"
 else
-  awk 'NR==1{print "# CONFIG BACKUP FROM $(date '+%Y-%m-%d %H:%M:%S')"}7' $CONFIG_FILE >>$CONFIG_BACKUP
+  # delete backup file if already exists
+  if test -f $CONFIG_BACKUP; then
+    rm $CONFIG_BACKUP
+  fi
+  DATE=$(date '+%Y-%m-%d %H:%M:%S')
+  awk 'NR==1{print "# '"$DATE"'\n"}-1' $CONFIG_FILE >> $CONFIG_BACKUP
   printf "\e[32mBacked up config from %s at %s.\n\e[0m" "$CONFIG_FILE" "$CONFIG_BACKUP"
 fi
 
@@ -45,13 +50,13 @@ git reset --hard
 git pull
 
 # restore config backup
-if test -f "$CONFIG_BACKUP"; then
+if test -f $CONFIG_BACKUP; then
   sudo cp $CONFIG_BACKUP $CONFIG_FILE
   printf "\e[32mRestored config backup from %s to %s.\n\e[0m" "$CONFIG_BACKUP" "$CONFIG_FILE"
 fi
 
 # chmod all sh files
-chmod +x ./create-redirect.sh ./pull.sh ./systemd/enable.sh ./systemd/disable.sh
+chmod +x ./*.sh ./**/*.sh
 
 # restart service if enabled
 if service --status-all | grep -Fq 'redirector'; then
