@@ -47,8 +47,11 @@ git pull
 # restore config backup
 if test -f "$CONFIG_BACKUP"; then
   sudo cp $CONFIG_BACKUP $CONFIG_FILE
-  printf "\e[32mRestored config backup from %s to %s." "$CONFIG_BACKUP" "$CONFIG_FILE"
+  printf "\e[32mRestored config backup from %s to %s\n\e[0m." "$CONFIG_BACKUP" "$CONFIG_FILE"
 fi
+
+# chmod all sh files
+chmod +x ./create-redirect.sh ./pull.sh ./systemd/enable.sh ./systemd/disable.sh
 
 # restart service if enabled
 if service --status-all | grep -Fq 'redirector'; then
