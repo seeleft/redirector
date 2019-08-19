@@ -60,7 +60,7 @@ install:
   # Update ubuntu packages
   - sudo apt update
   # install sshpass
-  - apt install sshpass -y
+  - sudo apt install sshpass -y
   # Update nodejs to 10.16.1 LTS
   - nvm install $env:NODE_VERSION
 
