@@ -59,6 +59,7 @@ if test -f "$CONFIG_BACKUP"; then
 fi
 
 # build sources
+npm install
 npm run dev:build
 
 # chmod all sh files

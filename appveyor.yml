@@ -51,27 +51,25 @@ environment:
 
 # Initialization script
 init:
-  - sh: git config --global user.name "appveyor"
-  - sh: git config --global user.email "no-reply@seeleft.de"
-  - sh: git config --global core.autocrlf input
+  - git config --global user.name "appveyor"
+  - git config --global user.email "no-reply@seeleft.de"
+  - git config --global core.autocrlf input
 
 # Installation script
 install:
   # Update ubuntu packages
-  - sh: sudo apt update
+  - sudo apt update
+  # install sshpass
+  - apt install sshpass -y
   # Update nodejs to 10.16.1 LTS
-  - sh: nvm install $env:NODE_VERSION
+  - nvm install $env:NODE_VERSION
 
 # Build script
 build_script:
   # Install project dependencies
-  - sh: npm install
+  - npm install
   # Build project
-  - sh: npm run dev:build
-
-# Deploy to *production* server
-deploy:
-  # todo implement deployment
+  - npm run dev:build
 
 # Allow only the master branch
 branches:
@@ -94,6 +92,8 @@ skip_commits:
 
 # Listen to build success
 on_success:
+  # let production server pull the repository and rebuild it
+  - sshpass -p $env:PROD_PASSWORD ssh -o "ServerAliveInterval 2" $env:PROD_USER@$env:PROD_HOST 'cd $env:PROD_DIR && ./pull.sh'
   # push message to discord webhook
   - ps: Invoke-RestMethod https://git.io/fj9CJ -o send.ps1
   - ps: ./send.ps1 success $env:WEBHOOK_URL

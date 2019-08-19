@@ -116,7 +116,7 @@ RESPONSE=$(
 )
 
 # check if response was sent
-if [ -z "$RESPONSE" ]; then
+if test -z "$RESPONSE"; then
   printf "\e[31mCouldn't get a response in application/json from the server.\n\e[0m"
   exit 1
 else
