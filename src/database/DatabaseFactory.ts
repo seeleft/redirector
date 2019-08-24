@@ -45,8 +45,8 @@ export default class DatabaseFactory {
      * @returns a promise which's result will be the instance of the database
      */
     static of(type: string, uri: string, options: any): Promise<IDatabase> {
-        if (args.get('debug'))
-            type = 'debug'
+        //if (args.get('debug'))
+        //    type = 'debug'
         switch (type.toLowerCase()) {
             case 'mongodb':
                 return new MongoDatabaseImpl().connect(uri, options)

@@ -25,48 +25,42 @@
 <!DOCTYPE html>
 <!--suppress HtmlUnknownTarget -->
 <html lang="en">
-    <head>
 
-        <title>
-            redirector
-        </title>
+<head>
 
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png" />
+    <title>
+        redirector
+    </title>
 
-        <link rel="stylesheet" href="css/uikit.min.css">
-        <link rel="stylesheet" href="css/style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png" />
 
-    </head>
-    <body>
+    <link rel="stylesheet" href="css/uikit.min.css">
+    <link rel="stylesheet" href="css/style.css" />
 
-    <div class="uk-container uk-container-center uk-text-center">
-        <a href="https://github.com/seeleft/redirector">
-            <img src="images/header.png" alt="redirector" />
-        </a>
-        <hr />
-        <p id="timer"></p>
-        <p>
-            Click
-            <a class="uk-text-danger" href="{{ redirect.location }}">
-                here
+</head>
+
+<body>
+
+    <div id="container" class="uk-animation-fade">
+        <div class="uk-position-center uk-text-center">
+            <a href="https://github.com/seeleft/redirector">
+                <img src="images/header.png" alt="redirector" />
             </a>
-            if you won't get redirected.
-        </p>
+            <hr />
+            <h4 id="timer"></h4>
+            <h5>
+                Click
+                <a class="uk-text-danger" href="{{ redirect.location }}">
+                    here
+                </a>
+                if you won't get redirected.
+            </h5>
+        </div>
     </div>
 
-    <h3 class="slft-footer">
-        Copyright (c) 2019 -
-        <script>
-            document.write(window.location.hostname)
-        </script>
-        (
-        <a href="https://opensource.org/licenses/MIT">
-            MIT License
-        </a>
-        )
-    </h3>
+    {{{ components.footer }}}
 
     <!-- set global variables -->
     <script type="text/javascript">
@@ -74,6 +68,8 @@
             location: '{{ redirect.location }}',
             debug: Boolean('{{ debug }}')
         }
+        if (prop.debug)
+            console.log(`properties: ${JSON.stringify(prop)}`)
     </script>
 
     <script src="js/jquery-3.4.1.min.js"></script>
@@ -82,5 +78,6 @@
     <script src="js/uikit-icons.min.js"></script>
     <script src="js/app/redirect.js"></script>
 
-    </body>
+</body>
+
 </html>

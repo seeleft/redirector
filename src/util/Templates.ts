@@ -23,16 +23,19 @@
 
 import Lodash from 'lodash'
 import Handlebars from 'handlebars'
-import {Response} from 'express'
-import {args} from '../main'
+import { Response } from 'express'
+import { args } from '../main'
 import StringUtil from './StringUtil'
 
 export default class Templates {
 
     private readonly templates: Map<string, HandlebarsTemplateDelegate> = new Map()
 
-    constructor(...templates: Array<string>) {
+    private readonly components: any = {}
+
+    constructor(templates: Array<string>, components: Array<string>) {
         templates.forEach(template => this.templates.set(template, Templates.compile(template)))
+        components.forEach(component => this.components[component] = StringUtil.fromFile(`./templates/components/${component}.html`))
     }
 
     // compile page template
@@ -41,8 +44,10 @@ export default class Templates {
     render = (template: string, response: Response, context: any = {}) => {
         // merge context with default values
         context = Lodash.merge({
-            debug: args.get('debug')
+            debug: args.get('debug'),
+            components: this.components
         }, context)
+        console.log(context)
         // lookup template
         let templateDelegate: HandlebarsTemplateDelegate | undefined
         if (context.debug)

@@ -21,26 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* oswald font */
-/*noinspection CssUnknownTarget*/
-@import url('https://fonts.googleapis.com/css?family=Oswald&display=swap');
 
 body, html {
     background-color: #ffcc00;
     color: black;
 }
 
-h1, h2, h3, h4, h5, h6, p {
-    font-family: 'Oswald', sans-serif;
-}
+/* import roboto font */
+/* noinspection CssUnknownTarget */
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap');
 
-#container {
-    width: 50%;
-    margin: 0 auto;
+/* apply roboto font */
+h1, h2, h3, h4, h5, h6, p {
+    font-family: 'Roboto Condensed', sans-serif;
 }
 
 .slft-footer {
-    font-family: 'Oswald', sans-serif;
     position: absolute;
     bottom: 0;
     width: 100%;
