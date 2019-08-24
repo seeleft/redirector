@@ -50,22 +50,19 @@
         header = 'Authorization'
 
         # Expected value of the authorization header
-        expect = 'YOUR_SAFE_PASSWORD'
+        expect = 'YOUR_SAFE_TOKEN'
 
-        # Whitelisted request ip addresses; use ['*'] to allow requests from anywhere
-        whitelist = ['127.0.0.1']
+# Google recaptcha credentials
+[recaptcha]
 
-    # HTTP static file configuration
-    [http.static]
-
-        # Should static files be provided
-        enabled = false
-
-        # Default static file path
-        path = '/'
+    site-key = ''
+    secret-key = ''
 
 # Database setings
 [database]
+
+    # pattern to match keys against
+    key = '[A-Za-z0-9]{3,16}'
 
     # Type of the database
     # Currently available: mongodb

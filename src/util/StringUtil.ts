@@ -22,21 +22,31 @@
  */
 
 import RandExp from 'randexp'
-import {config} from '../../main'
+import {config} from '../main'
 import {URL} from 'url'
 import FileSystem, {PathLike} from 'fs'
 
 export default class StringUtil {
 
-    private static readonly KEY_REGEX = new RegExp(config.database.key)
+    private static KEY_REGEX?: RegExp
 
     private constructor() {
         // prevent instantiaton
     }
 
-    static createKey = (): string => new RandExp(StringUtil.KEY_REGEX).gen()
+    private static keyRegex = (): RegExp => {
+        if (!StringUtil.KEY_REGEX)
+            throw new Error('Not yet initialized.')
+        return StringUtil.KEY_REGEX
+    }
 
-    static checkKey = (key: string): boolean => StringUtil.KEY_REGEX.test(key)
+    static init = (): void => {
+        StringUtil.KEY_REGEX = new RegExp(config.database.key)
+    }
+
+    static createKey = (): string => new RandExp(StringUtil.keyRegex()).gen()
+
+    static checkKey = (key: string): boolean => StringUtil.keyRegex().test(key)
 
     static checkUrl = (url: string): boolean => {
         try {

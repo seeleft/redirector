@@ -24,7 +24,7 @@
 import Lodash from 'lodash'
 import Handlebars from 'handlebars'
 import {Response} from 'express'
-import {args} from '../../main'
+import {args} from '../main'
 import StringUtil from './StringUtil'
 
 export default class Templates {
@@ -36,7 +36,7 @@ export default class Templates {
     }
 
     // compile page template
-    static compile = (template: string): HandlebarsTemplateDelegate => Handlebars.compile(StringUtil.fromFile(`templates/${template}.hbs`))
+    static compile = (template: string): HandlebarsTemplateDelegate => Handlebars.compile(StringUtil.fromFile(`./templates/${template}.hbs`))
 
     render = (template: string, response: Response, context: any = {}) => {
         // merge context with default values

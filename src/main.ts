@@ -21,7 +21,6 @@
  * SOFTWARE.
  */
 
-import cors from 'cors'
 import Toml from 'toml'
 import Path from 'path'
 import moment from 'moment'
@@ -35,11 +34,14 @@ import express, {Application, Response, Router} from 'express'
 import DatabaseFactory from './database/DatabaseFactory'
 import Winston, {format, Logger, transports} from 'winston'
 import WinstonDailyRotateFile from 'winston-daily-rotate-file'
+import StringUtil from './util/StringUtil'
+import Templates from './util/Templates'
+import CaptchaService from './util/CaptchaService'
 
 export const args: Map<string, any> = new Map()
 
 // parse argv arguments
-Lodash.filter(process.argv).map(arg => arg = arg.trim()).filter(arg => arg.startsWith('--')).map(arg => arg = arg.replace('--', '')).filter(arg => /[A-Z=-]/i.test(arg)).forEach(arg => {
+Lodash.filter(process.argv).map(arg => arg.trim()).filter(arg => arg.startsWith('--')).map(arg => arg = arg.replace('--', '')).filter(arg => /[A-Z=-]/i.test(arg)).forEach(arg => {
     if (!arg.includes('=') || arg.endsWith('='))
         args.set(arg, true)
     else {
@@ -53,11 +55,13 @@ Lodash.filter(process.argv).map(arg => arg = arg.trim()).filter(arg => arg.start
 })
 
 // parse config
-let config: any = Toml.parse(FileSystem.readFileSync(args.get('config') || './config.toml', 'UTF-8'))
+export let config: any = Toml.parse(StringUtil.fromFile(args.get('config') || './config.toml'))
 
 // merge config.debug.toml to existing config if such a file exists
 if (args.get('debug') && FileSystem.existsSync('./config.debug.toml'))
-    config = Lodash.merge(config, Toml.parse(FileSystem.readFileSync('./config.debug.toml', 'UTF-8')))
+    config = Lodash.merge(config, Toml.parse(StringUtil.fromFile('./config.debug.toml')))
+
+StringUtil.init()
 
 // setup logger
 export const Log: Logger = Winston.createLogger({
@@ -100,31 +104,48 @@ DatabaseFactory.of(config.database.type, config.database.uri, config.database.op
 
     const application: Application = express()
 
-    // initialize static files
-    if (config.http.static.enabled) {
-        // allow cross origin requests
-        application.use(cors())
-        // serve static files
-        application.use(config.http.static.path, express.static('static', {dotfiles: 'deny'}))
-    }
+    // serve static files
+    application.use('/', express.static(Path.join(__dirname, '../static'), {dotfiles: 'deny'}))
 
     // add body-parser to express
     application.use(BodyParser.json())
 
+    // setup recaptcha service
+    const captchaService: CaptchaService = new CaptchaService(config.recaptcha['secret-key'])
+
     // setup api router
     const api: Router = express.Router({caseSensitive: true})
 
-    // handle content, whitelist and authorization
+    // handle api authorization
     api.use((request, response, next) => {
         // set conent type to json since this is a restful api
         response.contentType('application/json')
-        // compar e request ip address with whitelist
-        const whitelist: Array<any> = config.http.authorization.whitelist // use any as type because array could potentially include non-string objects
-        if ('*' !== whitelist[0] && !whitelist.includes(request.header('x-forwarded-for') || request.connection.remoteAddress))
-            response.status(401).send()
-        // compare request authorization header with expected one
-        else if (config.http.authorization.expect !== request.header(config.http.authorization.header))
-            response.status(401).send()
+        // skip authorization in debug mode
+        if (args.get('debug')) {
+            next()
+            return
+        }
+        // extract authorization header
+        const token: string = (request.header(config.http.authorization.header) || [''])[0] || ''
+        // check for captcha response if authorization header is unset
+        if (!token) {
+            const captcha: string = request.body.captcha
+            // deny access on unset captcha response
+            if (!captcha) {
+                response.sendStatus(401)
+                return
+            }
+            // verify captcha response
+            captchaService.verify(captcha).then(success => {
+                if (!success)
+                    response.sendStatus(401)
+                else
+                    next()
+            })
+        }
+        // compare authorization header with expected one
+        if (config.http.authorization.expect !== token)
+            response.sendStatus(401)
         else
             next()
     })
@@ -141,7 +162,7 @@ DatabaseFactory.of(config.database.type, config.database.uri, config.database.op
             // parse redirect
             let redirect: Redirect
             try {
-                redirect = Redirect.new(request.body.location, request.params.key)
+                redirect = Redirect.new(request.body.location, request.params.key, request.body.instant)
             } catch (error) {
                 result(response, error)
                 return
@@ -154,29 +175,44 @@ DatabaseFactory.of(config.database.type, config.database.uri, config.database.op
     })
 
     // handle incoming delete requests (delete redirects)
-    api.delete('/delete/:key*?', (request, response) => {
+    /*api.delete('/delete/:key*?', (request, response) => {
         const key: string = request.params.key
         if (!key) result(response, new Error('Missing key in path.'))
         else database.delete(request.params.key)
             .then(() => result(response))
             .catch(error => result(response, error))
-    })
+    })*/
 
     // add api router to express
-    application.use(Path.join(config.http.apiPath, '/v1'), api)
+    application.use(`${config.http.apiPath}/v1`, api)
+    // setup templates
+    const templates: Templates = new Templates('index', 'redirect')
 
     // handle default get requests
-    application.get('/:key*?', (request, response) => {
-        const status: number = config.http.redirect.status
-        const key: string = request.params.key
-        // redirect to default url if no key is given
-        if (!key)
-            response.redirect(status, config.http.redirect.default)
+    application.get('/', (request, response) =>
+        // render the response
+        templates.render('index', response, {
+            // random key
+            key: StringUtil.createKey(),
+            // recaptcha site key
+            'site-key': config.recaptcha['site-key']
+        })
+    )
+
+    // handle default get requests
+    application.get('/:key*?', (request, response) =>
         // lookup given key in database and redirect user
-        else database.find(key)
-            .then(redirect => response.redirect(status, redirect.location()))
-            .catch(() => response.status(404).send())
-    })
+        database.find(request.params.key)
+            .then(redirect => {
+                if (redirect.instant())
+                // redirect the client directly
+                    response.redirect(config.http.redirect.status, redirect.location())
+                else
+                // render the redirect template
+                    templates.render('redirect', response, {redirect})
+            })
+            .catch(() => response.sendStatus(404))
+    )
 
     const server: Server = http.createServer(application)
 
@@ -185,6 +221,6 @@ DatabaseFactory.of(config.database.type, config.database.uri, config.database.op
         port: config.http.port,
         host: config.http.host,
         path: config.http.path
-    }, () => Log.info(`HTTP server is now listening: ${JSON.stringify(config.http)}`))
+    }, () => Log.info(`HTTP server is now listening at http://${config.http.host}:${config.http.port}${config.http.path}`))
 
-}).catch(error => Log.error(`Could not connect to database: ${error.message}`))
+}).catch(error => Log.error(`INITIALIZATION ERROR: ${error.message}`))

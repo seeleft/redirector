@@ -21,8 +21,32 @@
  * SOFTWARE.
  */
 
-const $ = require('jquery')
+// @ts-ignore
+const properties: any = prop
 
-$(document).ready(() => {
+// rediretion delay in seconds
+let delay: number = (properties.debug ? 120 : 5)
 
+function update(): void {
+    // update countdown
+    $('#timer').text(`You're getting redirected in ${(delay !== 1 ? delay : 'one')} second${(delay !== 1 ? 's' : '')}...`)
+    // update page title
+    if (!document.title.includes(':'))
+        document.title += `: ${delay}`
+    else
+        document.title = `${document.title.split(':')[0]}: ${delay}`
+}
+
+$(() => {
+    // run countdown
+    update()
+    const interval = setInterval(() => {
+        if (1 == delay) {
+            window.location.href = properties.location
+            clearInterval(interval)
+            return
+        }
+        delay -= 1
+        update()
+    }, 1000)
 })

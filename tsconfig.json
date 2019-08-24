@@ -3,7 +3,8 @@
     "target": "es6",
     "module": "commonjs",
     "lib": [
-      "es2017"
+      "es2017",
+      "dom"
     ],
     "outDir": "dist",
     "strict": true,
@@ -12,5 +13,9 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "resolveJsonModule": true
-  }
+  },
+  "include": [
+    "src/**/*.ts",
+    "static/**/*.ts"
+  ]
 }

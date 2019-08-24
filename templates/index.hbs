@@ -33,7 +33,7 @@
 
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="shortcut icon" type="image/x-icon" href="favicon.png" />
+        <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png" />
 
         <link rel="stylesheet" href="css/uikit.min.css" />
         <link rel="stylesheet" href="css/style.css" />
@@ -41,13 +41,12 @@
         <script src="js/uikit.min.js"></script>
         <script src="js/uikit-icons.min.js"></script>
         <script src="js/jquery-3.4.1.min.js"></script>
-        <script src="js/app.js"></script>
+        <script src="js/app/index.js"></script>
 
     </head>
     <body>
 
-    <div class="uk-container uk-animation-scale-up">
-
+    <div id="container" class="uk-container uk-animation-scale-up">
         <h2>
             <script type="text/javascript">
                 document.write(document.title)
@@ -76,7 +75,17 @@
             uk-icon="copy" uk-tooltip="Copy to Clipboard" onclick="copy()"></span>
     </div>
 
-    <div id="footer">&copy; seeleft.de // 2019</div>
+    <div id="footer">
+        Copyright (c) 2019 -
+        <script>
+            document.write(window.location.hostname)
+        </script>
+        (
+        <a href="https://opensource.org/licenses/MIT">
+            MIT License
+        </a>
+        )
+    </div>
 
     </body>
 </html>

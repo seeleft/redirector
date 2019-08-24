@@ -1,0 +1,86 @@
+<!--
+    ~ This file is licensed under the MIT License and is part of the "redirector" project.
+    ~ Copyright (c) 2019 Tim Kempe
+    ~ Copyright (c) 2019 Daniel Riegler
+    ~
+    ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+    ~ of this software and associated documentation files (the "Software"), to deal
+    ~ in the Software without restriction, including without limitation the rights
+    ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    ~ copies of the Software, and to permit persons to whom the Software is
+    ~ furnished to do so, subject to the following conditions:
+    ~
+    ~ The above copyright notice and this permission notice shall be included in all
+    ~ copies or substantial portions of the Software.
+    ~
+    ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    ~ SOFTWARE.
+-->
+
+<!DOCTYPE html>
+<!--suppress HtmlUnknownTarget -->
+<html lang="en">
+    <head>
+
+        <title>
+            redirector
+        </title>
+
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png" />
+
+        <link rel="stylesheet" href="css/uikit.min.css">
+        <link rel="stylesheet" href="css/style.css" />
+
+    </head>
+    <body>
+
+    <div class="uk-container uk-container-center uk-text-center">
+        <a href="https://github.com/seeleft/redirector">
+            <img src="images/header.png" alt="redirector" />
+        </a>
+        <hr />
+        <p id="timer"></p>
+        <p>
+            Click
+            <a class="uk-text-danger" href="{{ redirect.location }}">
+                here
+            </a>
+            if you won't get redirected.
+        </p>
+    </div>
+
+    <h3 class="slft-footer">
+        Copyright (c) 2019 -
+        <script>
+            document.write(window.location.hostname)
+        </script>
+        (
+        <a href="https://opensource.org/licenses/MIT">
+            MIT License
+        </a>
+        )
+    </h3>
+
+    <!-- set global variables -->
+    <script type="text/javascript">
+        const prop = {
+            location: '{{ redirect.location }}',
+            debug: Boolean('{{ debug }}')
+        }
+    </script>
+
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/jquery.countdown.min.js"></script>
+    <script src="js/uikit.min.js"></script>
+    <script src="js/uikit-icons.min.js"></script>
+    <script src="js/app/redirect.js"></script>
+
+    </body>
+</html>

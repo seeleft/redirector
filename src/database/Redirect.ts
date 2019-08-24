@@ -25,7 +25,7 @@
  * Object responsible for being a container in which to validate and store a redirect
  */
 
-import {URL} from 'url'
+import StringUtil from '../util/StringUtil'
 
 export default class Redirect {
 
@@ -34,34 +34,35 @@ export default class Redirect {
 
     private readonly $key: string
 
-    private constructor(location: string, key: string) {
+    private readonly $instant: boolean
+
+    private constructor(location: string, key: string, instant: boolean) {
         this.$location = location
         this.$key = key
+        this.$instant = instant
     }
 
     /**
      * Creates (and validates the values) an instance of a redirect
      *
      * @param location - the location (url) of the redirect
-     * @param key - the key of the redirect (alphanumeric, between 3 and 16 characters long)
+     * @param key - the key of the redirect (will be randomized if unset)
      *
      * @returns an instance of a redirect
      *
      * @throws if the values can't be validated
      */
-    static new(location: string, key: string): Redirect {
-        if (key.length < 3 || key.length > 16)
-            throw new Error(`Length of key '${key}' is illegal.`)
-        // validate key against alphanumeric pattern
-        if (!/[A-Z0-9]/i.test(key))
-            throw new Error(`Key '${key}' contains illegal characters.`)
-        // "validate" url
-        try {
-            new URL(location)
-        } catch (error) {
+    static new(location: string, key?: string, instant: boolean = false): Redirect {
+        // generate key from regex if unset
+        if (!key)
+            key = StringUtil.createKey()
+        // validate key against regex
+        else if (!StringUtil.checkKey(key))
+            throw new Error(`Key '${key}' contains illegal characters or does not match the required length.`)
+        // validate url
+        if (!StringUtil.checkUrl(location))
             throw new Error(`Invalid url: ${location}`)
-        }
-        return new Redirect(encodeURI(location), key)
+        return new Redirect(encodeURI(location), key, instant)
     }
 
     /**
@@ -74,7 +75,7 @@ export default class Redirect {
     static fromJson(json: any): Redirect {
         if (!json._location || !json._key)
             throw new Error(`Json (${json}) is missing some neccessary properties.`)
-        return new Redirect(json._location, json._key)
+        return new Redirect(json._location, json._key, json._instant)
     }
 
     /**
@@ -85,7 +86,8 @@ export default class Redirect {
     toJson(): any {
         return {
             _key: this.$key,
-            _location: this.$location
+            _location: this.$location,
+            _instant: this.$instant
         }
     }
 
@@ -98,5 +100,10 @@ export default class Redirect {
      * @returns the key of the redirect
      */
     key = (): string => this.$key
+
+    /**
+     * @returns if the redirect should happen instantly (HTTP level)
+     */
+    instant = (): boolean => this.$instant
 
 }
