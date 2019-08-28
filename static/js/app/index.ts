@@ -1,6 +1,5 @@
 /*
  * This file is licensed under the MIT License and is part of the "redirector" project.
- * Copyright (c) 2019 Tim Kempe
  * Copyright (c) 2019 Daniel Riegler
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,38 +21,17 @@
  * SOFTWARE.
  */
 
-/* import roboto font */
-/* noinspection CssUnknownTarget ,CssInvalidImport*/
-@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap');
-
-/* apply roboto font */
-h1, h2, h3, h4, h5, h6, p {
-    font-family: 'Roboto Condensed', sans-serif;
+const updateOutput = (): void => {
+    let location: string = window.location.toString()
+    if (!location.endsWith('/'))
+        location += '/'
+    const key: any = $('#key')
+    location += key.val() || key.attr('placeholder')
+    $('#output').val(location)
 }
 
-#container {
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 194, 0, 0.6);
-    background-size: cover;
-    background-position: 50% 50%;
-    background-repeat: no-repeat;
-}
-
-.slft-footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    line-height: 1.5em;
-    text-align: center;
-}
-
-.slft-btn-yellow {
-    color: black;
-    background-color: white;
-}
-
-.slft-btn-yellow:hover {
-    color: white;
-    background-color: black;
-}
+$(() => {
+    updateOutput()
+    // listen to key change
+    $('#key').on('input propertychange paste', updateOutput)
+})

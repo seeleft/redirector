@@ -22,73 +22,63 @@
     ~ SOFTWARE.
 -->
 
-<!DOCTYPE html>
 <!--suppress HtmlUnknownTarget -->
 <html lang="en">
 
-<head>
+    {{{ components.head }}}
 
-    <title>
-        redirector
-    </title>
+    <body>
 
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png" />
+    <!-- main content container -->
+    <div id="container" class="uk-animation-fade">
+        <!-- centered content container -->
+        <div class="uk-position-center uk-text-center">
+            {{{ components.heading }}}
+            <form class="uk-form-stacked">
+                <div class="uk-margin">
+                    <div class="uk-inline">
+                        <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: link"></span>
+                        <label>
+                            <input id="location" class="uk-input" type="text" placeholder="https://">
+                        </label>
+                    </div>
+                </div>
+                <div class="uk-margin">
+                    <div class="uk-inline">
+                        <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: tag"></span>
+                        <label>
+                            <input id="key" class="uk-input" type="text" placeholder="{{ key }}">
+                        </label>
+                    </div>
+                </div>
+                <div class="uk-margin">
+                    {{#if debug}}
+                        <button type="button" onclick="submit('')">Submit</button>
+                    {{else}}
+                        <div class="g-recaptcha" data-callback="submit" data-sitekey="{{ site-key }}"></div>
+                    {{/if}}
+                </div>
+            </form>
 
-    <link rel="stylesheet" href="css/uikit.min.css" />
-    <link rel="stylesheet" href="css/style.css" />
-
-    <script src="js/uikit.min.js"></script>
-    <script src="js/uikit-icons.min.js"></script>
-    <script src="js/jquery-3.4.1.min.js"></script>
-    <script src="js/app/index.js"></script>
-
-</head>
-
-<body>
-
-    <div id="container" class="uk-container uk-animation-scale-up">
-        <h2>
-            <script type="text/javascript">
-                document.write(document.title)
-            </script>
-        </h2>
-
-        <form>
-            <div class="uk-width-1-2@s">
-                <label>
-                    <input class="uk-input" type="text" placeholder="https://" required>
-                </label>
-                <span class="uk-label uk-label-danger">is required</span>
+            <h4>Your shortened url:</h4>
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <label>
+                        <input id="output" class="uk-input" type="text" disabled>
+                    </label>
+                </div>
+                <span uk-icon="copy" uk-tooltip="Copy to clipboard" onclick="alert('lol')"></span>
             </div>
-            <br>
-            <div class="uk-width-1-2@s">
-                <label>
-                    <input class="uk-input" type="text" placeholder="KEY">
-                </label>
-            </div>
-            <br>
-            <button type="submit" class="uk-button slft-btn-yellow">Shorten</button>
-        </form>
-
-        <h4>Your Link:</h4>
-        <input class="uk-input uk-width-1-4@s" id="text1" value="https://slft.cf/E5gZ" type="text" readonly> <span
-            uk-icon="copy" uk-tooltip="Copy to Clipboard" onclick="copy()"></span>
+        </div>
     </div>
 
-    <div id="footer">
-        Copyright (c) 2019 -
-        <script>
-            document.write(window.location.hostname)
-        </script>
-        (
-        <a href="https://opensource.org/licenses/MIT">
-            MIT License
-        </a>
-        )
-    </div>
+    {{{ components.footer }}}
 
-</body>
+    {{{ components.scripts }}}
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script type="text/javascript" src="js/app/index.js"></script>
+
+    </body>
 
 </html>

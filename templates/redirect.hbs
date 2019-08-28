@@ -22,33 +22,19 @@
     ~ SOFTWARE.
 -->
 
-<!DOCTYPE html>
 <!--suppress HtmlUnknownTarget -->
 <html lang="en">
 
-<head>
+    {{{ components.head }}}
 
-    <title>
-        redirector
-    </title>
+    <body>
 
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png" />
-
-    <link rel="stylesheet" href="css/uikit.min.css">
-    <link rel="stylesheet" href="css/style.css" />
-
-</head>
-
-<body>
-
+    <!-- main content container -->
     <div id="container" class="uk-animation-fade">
+        <!-- centered content container -->
         <div class="uk-position-center uk-text-center">
-            <a href="https://github.com/seeleft/redirector">
-                <img src="images/header.png" alt="redirector" />
-            </a>
-            <hr />
+            {{{ components.heading }}}
+            <!-- timer element - populated by the script -->
             <h4 id="timer"></h4>
             <h5>
                 Click
@@ -68,16 +54,16 @@
             location: '{{ redirect.location }}',
             debug: Boolean('{{ debug }}')
         }
+        // print debug information
         if (prop.debug)
             console.log(`properties: ${JSON.stringify(prop)}`)
     </script>
 
-    <script src="js/jquery-3.4.1.min.js"></script>
-    <script src="js/jquery.countdown.min.js"></script>
-    <script src="js/uikit.min.js"></script>
-    <script src="js/uikit-icons.min.js"></script>
+    {{{ components.scripts }}}
+
+    <!-- main page script -->
     <script src="js/app/redirect.js"></script>
 
-</body>
+    </body>
 
 </html>

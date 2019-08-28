@@ -27,12 +27,12 @@ import moment from 'moment'
 import Lodash from 'lodash'
 import FileSystem from 'fs'
 import exitHook from 'exit-hook'
-import http, { Server } from 'http'
+import http, {Server} from 'http'
 import BodyParser from 'body-parser'
 import Redirect from './database/Redirect'
-import express, { Application, Response, Router } from 'express'
+import express, {Application, Response, Router} from 'express'
 import DatabaseFactory from './database/DatabaseFactory'
-import Winston, { format, Logger, transports } from 'winston'
+import Winston, {format, Logger, transports} from 'winston'
 import WinstonDailyRotateFile from 'winston-daily-rotate-file'
 import StringUtil from './util/StringUtil'
 import Templates from './util/Templates'
@@ -105,7 +105,7 @@ DatabaseFactory.of(config.database.type, config.database.uri, config.database.op
     const application: Application = express()
 
     // serve static files
-    application.use('/', express.static(Path.join(__dirname, '../static'), { dotfiles: 'deny' }))
+    application.use('/', express.static(Path.join(__dirname, '../static'), {dotfiles: 'deny'}))
 
     // add body-parser to express
     application.use(BodyParser.json())
@@ -114,11 +114,11 @@ DatabaseFactory.of(config.database.type, config.database.uri, config.database.op
     const captchaService: CaptchaService = new CaptchaService(config.recaptcha['secret-key'])
 
     // setup api router
-    const api: Router = express.Router({ caseSensitive: true })
+    const api: Router = express.Router({caseSensitive: true})
 
     // handle api authorization
     api.use((request, response, next) => {
-        // set conent type to json since this is a restful api
+        // set content type to json since this is a restful api
         response.contentType('application/json')
         // skip authorization in debug mode
         if (args.get('debug')) {
@@ -185,9 +185,17 @@ DatabaseFactory.of(config.database.type, config.database.uri, config.database.op
 
     // add api router to express
     application.use(`${config.http.apiPath}/v1`, api)
-    
+
     // setup templates
-    const templates: Templates = new Templates(['redirect'], ['footer'])
+    const templates: Templates = new Templates([
+        'redirect',
+        'index'
+    ], [
+        'footer',
+        'head',
+        'scripts',
+        'heading'
+    ])
 
     // handle default get requests
     application.get('/', (request, response) =>
@@ -206,11 +214,11 @@ DatabaseFactory.of(config.database.type, config.database.uri, config.database.op
         database.find(request.params.key)
             .then(redirect => {
                 if (redirect.instant())
-                    // redirect the client directly
+                // redirect the client directly
                     response.redirect(config.http.redirect.status, redirect.location())
                 else
-                    // render the redirect template
-                    templates.render('redirect', response, { redirect })
+                // render the redirect template
+                    templates.render('redirect', response, {redirect})
             })
             .catch(() => response.sendStatus(404))
     )

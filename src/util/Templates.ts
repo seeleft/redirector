@@ -23,9 +23,10 @@
 
 import Lodash from 'lodash'
 import Handlebars from 'handlebars'
-import { Response } from 'express'
-import { args } from '../main'
+import {Response} from 'express'
+import {args, Log} from '../main'
 import StringUtil from './StringUtil'
+import UglifyJS, {MinifyOutput} from 'uglify-js'
 
 export default class Templates {
 
@@ -34,8 +35,13 @@ export default class Templates {
     private readonly components: any = {}
 
     constructor(templates: Array<string>, components: Array<string>) {
+        // prerender/compile page templates
         templates.forEach(template => this.templates.set(template, Templates.compile(template)))
-        components.forEach(component => this.components[component] = StringUtil.fromFile(`./templates/components/${component}.html`))
+        // parse page components
+        components.forEach(component => {
+            const fileName: string = `${component}.html`
+            this.components[component] = `\r<!-- component: ${fileName} -->\n${StringUtil.fromFile(`./templates/components/${fileName}`)}`
+        })
     }
 
     // compile page template
@@ -47,20 +53,27 @@ export default class Templates {
             debug: args.get('debug'),
             components: this.components
         }, context)
-        console.log(context)
         // lookup template
-        let templateDelegate: HandlebarsTemplateDelegate | undefined
-        if (context.debug)
-            templateDelegate = Templates.compile(template)
-        else
-            templateDelegate = this.templates.get(template)
+        const templateDelegate: HandlebarsTemplateDelegate | undefined = (context.debug ? Templates.compile(template) : this.templates.get(template))
         // check if template is available
         if (!templateDelegate) {
             response.sendStatus(500)
             return
         }
+        // render template
+        let content: string = templateDelegate(context)
+        // minify content in production
+        /*if (args.get('debug')) {
+            const output: MinifyOutput = UglifyJS.minify(content)
+            // check for errors
+            if (output.error) {
+                Log.warn(`Could not minify content of template "${templateDelegate}": ${output.error.message}"`)
+                return
+            }
+            content = output.code
+        }*/
         // render template and send response to the client
-        response.contentType('text/html').send(templateDelegate(context))
+        response.contentType('text/html').send(content)
     }
 
 }

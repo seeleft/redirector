@@ -22,6 +22,7 @@
  */
 
 // @ts-ignore
+// export properties from js - the idiot way
 const properties: any = prop
 
 // rediretion delay in seconds
@@ -31,21 +32,27 @@ const update = (): void => {
     // update countdown
     $('#timer').text(`You're getting redirected in ${(delay !== 1 ? delay : 'one')} second${(delay !== 1 ? 's' : '')}...`)
     // update page title
+    // asign time to the title if not already done so
     if (!document.title.includes(':'))
         document.title += `: ${delay}`
     else
+    // extract and update time from the title
         document.title = `${document.title.split(':')[0]}: ${delay}`
 }
 
 $(() => {
-    // run countdown
+    // run countdown timer every 1000ms (one second)
     update()
     const interval = setInterval(() => {
+        // check for end of the delay
         if (1 == delay) {
-            window.location.href = properties.location
+            // stop the interval task
             clearInterval(interval)
+            // redirect to the target page
+            window.location.href = properties.location
             return
         }
+        // update the delay
         delay -= 1
         update()
     }, 1000)
