@@ -11,7 +11,7 @@
     "start:debug": "node . --debug",
     "start": "node ."
   },
-  "keywords": [ ],
+  "keywords": [],
   "repository": {
     "type": "git",
     "url": "https://bitbucket.org/seeleft/redirector"
