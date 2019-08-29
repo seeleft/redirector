@@ -189,7 +189,8 @@ DatabaseFactory.of(config.database.type, config.database.uri, config.database.op
     // setup templates
     const templates: Templates = new Templates([
         'redirect',
-        'index'
+        'index',
+        '404'
     ], [
         'footer',
         'head',
@@ -223,7 +224,7 @@ DatabaseFactory.of(config.database.type, config.database.uri, config.database.op
                 // render the redirect template
                     templates.render('redirect', response, {redirect})
             })
-            .catch(() => response.sendStatus(404))
+            .catch(() => response.status(404).send(templates.render('404', response)))
     )
 
     const server: Server = http.createServer(application)
