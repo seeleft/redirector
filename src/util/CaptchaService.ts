@@ -21,10 +21,10 @@
  * SOFTWARE.
  */
 
-import {URL} from 'url'
+import {format} from 'util'
 import {post} from 'request'
 
-const RECAPTCHA_BASE_URL: string = 'https://www.google.com/recaptcha/api/siteverify'
+const RECAPTCHA_BASE_URL: string = 'https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s'
 
 export default class CaptchaService {
 
@@ -35,12 +35,8 @@ export default class CaptchaService {
     }
 
     verify = (response: string): Promise<boolean> => new Promise(resolve => {
-        // build request url
-        const url: URL = new URL(RECAPTCHA_BASE_URL)
-        url.searchParams.append('secret', this.secretKey)
-        url.searchParams.append('response', response)
         // send request to recaptcha api
-        post(url.toString(), (error, response, body) => {
+        post(format(RECAPTCHA_BASE_URL, this.secretKey, response), (error, response, body) => {
             if (error || 200 !== response.statusCode)
                 resolve(false)
             else
