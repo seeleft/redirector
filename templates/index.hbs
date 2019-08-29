@@ -25,18 +25,24 @@
 <!--suppress HtmlUnknownTarget -->
 <html lang="en">
 
-    {{{ components.head }}}
+    <!--suppress HtmlRequiredTitleElement -->
+    <head>
+        {{{ components.head }}}
 
-    <!-- alertify framework styles -->
-    <link rel="stylesheet" type="text/css" href="css/alertify.min.css">
-    <link rel="stylesheet" type="text/css" href="css/alertify-default.min.css">
+        <!-- alertify framework styles -->
+        <link rel="stylesheet" type="text/css" href="css/alertify.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/alertify-default.min.css" />
+    </head>
 
     <body>
 
     <!-- main content container -->
     <div id="container" class="uk-animation-fade">
-        <!-- centered content container -->
-        <div id="center" class="uk-position-center uk-text-center">
+        <!--
+           ~ Centered content container
+           ~ Made visible after recaptcha initialization
+        -->
+        <div id="center" class="uk-position-center uk-text-center uk-animation-fade" hidden>
             {{{ components.heading }}}
             <form class="uk-form-stacked">
                 <!-- location/url textbox -->
@@ -90,8 +96,7 @@
     <script type="text/javascript">
         const prop = {
             key: {
-                regex: /^({{ key.regex }})$/,
-                random: '{{ key.random }}'
+                regex: /^({{ key.regex }})$/
             },
             debug: Boolean('{{ debug }}')
         }
@@ -101,7 +106,7 @@
     </script>
 
     <!-- recaptcha v2 -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://www.google.com/recaptcha/api.js?onload=show" async defer></script>
     <!-- additional uikit icons -->
     <script type="text/javascript" src="js/uikit-icons.min.js"></script>
     <!-- alertify framework -->

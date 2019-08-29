@@ -102,6 +102,13 @@ const copy = (): void => {
 }
 
 // noinspection JSUnusedGlobalSymbols
+/* recaptcha onload callback */
+function show() {
+    // make centered container visible after captcha has been loaded
+    $('#center').removeAttr('hidden')
+}
+
+// noinspection JSUnusedGlobalSymbols
 /**
  * Submit callback (invoked by recaptcha)
  *
