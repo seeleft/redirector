@@ -24,7 +24,7 @@
 import Lodash from 'lodash'
 import Handlebars from 'handlebars'
 import {Response} from 'express'
-import {args} from '../main'
+import {args, config} from '../main'
 import StringUtil from './StringUtil'
 
 export default class Templates {
@@ -50,7 +50,8 @@ export default class Templates {
         // merge context with default values
         context = Lodash.merge({
             debug: args.get('debug'),
-            components: this.components
+            components: this.components,
+            'base-href': config.http['base-href']
         }, context)
         // lookup template
         const templateDelegate: HandlebarsTemplateDelegate | undefined = (context.debug ? Templates.compile(template) : this.templates.get(template))

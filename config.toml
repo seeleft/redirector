@@ -22,11 +22,14 @@
 # HTTP server settings
 [http]
 
+    # Base href (injected into the html code)
+    base-href = 'https://seeleft.de/go/'
+
     # Default path prefix of the http server
     path = '/'
 
     # Default path of the api
-    apiPath = '/api'
+    api-path = '/api/v1'
 
     # Port of the http server
     port = 5000

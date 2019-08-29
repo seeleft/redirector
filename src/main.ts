@@ -184,7 +184,7 @@ DatabaseFactory.of(config.database.type, config.database.uri, config.database.op
     })*/
 
     // add api router to express
-    application.use(`${config.http.apiPath}/v1`, api)
+    application.use(config.http['api-path'], api)
 
     // setup templates
     const templates: Templates = new Templates([
