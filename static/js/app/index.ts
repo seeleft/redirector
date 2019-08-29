@@ -133,7 +133,7 @@ function submit(response?: string): void {
             instant: $('#instant-redirect').prop('checked'),
             response
         }),
-        error: (jqXHR, message, error) => notify(false, (jqXHR.responseJSON||{}).error.message || error),
+        error: (jqXHR, message, error) => notify(false, (jqXHR.responseJSON || {error: {}}).error.message || error),
         success: () => notify(true, 'Success!')
     })
 }
