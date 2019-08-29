@@ -40,9 +40,6 @@
         # Redirect status code
         status = 308
 
-        # Default redirection (empty key)
-        default = 'https://seeleft.de'
-
     # Authorization settings
     [http.authorization]
 
