@@ -213,7 +213,7 @@ DatabaseFactory.of(config.database.type, config.database.uri, config.database.op
     )
 
     // handle default get requests
-    application.get('/:key*?', (request, response) =>
+    application.get('/:key', (request, response) =>
         // lookup given key in database and redirect user
         database.find(request.params.key)
             .then(redirect => {
