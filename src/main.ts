@@ -129,7 +129,7 @@ DatabaseFactory.of(config.database.type, config.database.uri, config.database.op
         const token: string = (request.header(config.http.authorization.header) || [''])[0] || ''
         // check for captcha response if authorization header is unset
         if (!token) {
-            const captcha: string = request.body.captcha
+            const captcha: string = request.body.response
             // deny access on unset captcha response
             if (!captcha) {
                 response.sendStatus(401)
