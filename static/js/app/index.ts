@@ -136,7 +136,7 @@ function submit(response?: string): void {
         error: (jqXHR, message, error) => {
             const response: any = jqXHR.responseJSON
             if (!response)
-                notify(false, error)
+                notify(false, error || message)
             else
                 notify(false, response.error.message)
         },
