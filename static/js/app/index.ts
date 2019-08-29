@@ -21,17 +21,101 @@
  * SOFTWARE.
  */
 
+// @ts-ignore
+// export properties from js - the idiot way
+const properties: any = prop
+
+const key = (): string => {
+    const key: JQuery<HTMLInputElement> = $('#key')
+    return key.val() || key.prop('placeholder')
+}
+
 const updateOutput = (): void => {
+    // get current url
     let location: string = window.location.toString()
+    // append trailing slash to url
     if (!location.endsWith('/'))
         location += '/'
-    const key: any = $('#key')
-    location += key.val() || key.attr('placeholder')
+    // append key to url
+    location += key()
+    // update the output textbox
     $('#output').val(location)
+}
+
+const notify = (success: boolean, message: string): void => {
+    // @ts-ignore
+    const $alertify: any = alertify
+    if (success) // noinspection TypeScriptValidateJSTypes
+        $alertify.success(message)
+    else {
+        $alertify.error(message)
+        // @ts-ignore
+        grecaptcha.reset()
+    }
+}
+
+const validateUrl = (): void => {
+    const location: JQuery<HTMLInputElement> = $('#location')
+    formStatus(location, checkUrl(location.val() as string))
+}
+
+const validateKey = (highlight: boolean): void => {
+    const keyElement: JQuery<HTMLInputElement> = $('#key')
+    if (properties.key.regex.test(key())) {
+        if (highlight) {
+            updateOutput()
+            formStatus(keyElement, true)
+        }
+    } else formStatus(keyElement, false)
+}
+
+// noinspection JSUnusedGlobalSymbols
+function submit(response?: string): void {
+    const location: JQuery<HTMLInputElement> = $('#location')
+    if (!location.hasClass('uk-form-success') || $('#key').hasClass('uk-form-danger')) {
+        notify(false, 'Fill in the form correctly!')
+        validateUrl()
+        validateKey(false)
+        return
+    }
+    // noinspection JSIgnoredPromiseFromCall
+    $.ajax({
+        method: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        url: `/api/v1/create/${key()}`,
+        data: JSON.stringify({
+            location: location.val(),
+            instant: $('#instant-redirect').prop('checked'),
+            response
+        }),
+        error: (jqXHR, message, error) => notify(false, jqXHR.responseJSON.error.message || error),
+        success: () => notify(true, 'Success!')
+    })
+}
+
+// adopted from: http://stackoverflow.com/questions/1303872/ddg#8317014
+// noinspection RegExpRedundantEscape
+const checkUrl = (url: string): boolean => /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/.test(url)
+
+const formStatus = (element: JQuery<HTMLInputElement>, status: boolean): void => {
+    if (status) {
+        if (element.hasClass('uk-form-danger'))
+            element.removeClass('uk-form-danger')
+        if (!element.hasClass('uk-form-success'))
+            element.addClass('uk-form-success')
+    } else {
+        if (element.hasClass('uk-form-success'))
+            element.removeClass('uk-form-success')
+        if (!element.hasClass('uk-form-danger'))
+            element.addClass('uk-form-danger')
+    }
 }
 
 $(() => {
     updateOutput()
-    // listen to key change
-    $('#key').on('input propertychange paste', updateOutput)
+    // listen to location input
+    $('#location').on('input propertychange paste', validateUrl)
+    // listen to key input change
+    $('#key').on('input propertychange paste', () => validateKey(true))
 })

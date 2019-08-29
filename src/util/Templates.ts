@@ -24,9 +24,8 @@
 import Lodash from 'lodash'
 import Handlebars from 'handlebars'
 import {Response} from 'express'
-import {args, Log} from '../main'
+import {args} from '../main'
 import StringUtil from './StringUtil'
-import UglifyJS, {MinifyOutput} from 'uglify-js'
 
 export default class Templates {
 
@@ -62,16 +61,6 @@ export default class Templates {
         }
         // render template
         let content: string = templateDelegate(context)
-        // minify content in production
-        /*if (args.get('debug')) {
-            const output: MinifyOutput = UglifyJS.minify(content)
-            // check for errors
-            if (output.error) {
-                Log.warn(`Could not minify content of template "${templateDelegate}": ${output.error.message}"`)
-                return
-            }
-            content = output.code
-        }*/
         // render template and send response to the client
         response.contentType('text/html').send(content)
     }

@@ -27,47 +27,57 @@
 
     {{{ components.head }}}
 
+    <!-- alertify framework styles -->
+    <link rel="stylesheet" type="text/css" href="css/alertify.min.css">
+    <link rel="stylesheet" type="text/css" href="css/alertify-default.min.css">
+
     <body>
 
     <!-- main content container -->
     <div id="container" class="uk-animation-fade">
         <!-- centered content container -->
-        <div class="uk-position-center uk-text-center">
+        <div id="center" class="uk-position-center uk-text-center">
             {{{ components.heading }}}
             <form class="uk-form-stacked">
+                <!-- location/url textbox -->
                 <div class="uk-margin">
-                    <div class="uk-inline">
+                    <div class="uk-inline" uk-tooltip="Location (url) of the redirect">
                         <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: link"></span>
                         <label>
                             <input id="location" class="uk-input" type="text" placeholder="https://">
                         </label>
                     </div>
                 </div>
+                <!-- key textbox -->
                 <div class="uk-margin">
-                    <div class="uk-inline">
+                    <div class="uk-inline" uk-tooltip="Key (path) of the redirect">
                         <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: tag"></span>
                         <label>
-                            <input id="key" class="uk-input" type="text" placeholder="{{ key }}">
+                            <input id="key" class="uk-input" type="text" placeholder="{{ key.random }}">
                         </label>
                     </div>
                 </div>
+                <!-- instant redirect checkmark -->
                 <div class="uk-margin">
-                    {{#if debug}}
-                        <button type="button" onclick="submit('')">Submit</button>
-                    {{else}}
-                        <div class="g-recaptcha" data-callback="submit" data-sitekey="{{ site-key }}"></div>
-                    {{/if}}
+                    <label uk-tooltip="Redirect the client instantly?">
+                        <input id="instant-redirect" class="uk-checkbox" type="checkbox" checked>
+                        Instant redirect
+                    </label>
+                </div>
+                <!-- captcha/submit button -->
+                <div class="uk-margin">
+                    <div class="g-recaptcha" data-callback="submit" data-sitekey="{{ site-key }}"></div>
                 </div>
             </form>
-
-            <h4>Your shortened url:</h4>
+            <!-- link information/output -->
             <div class="uk-margin">
+                <h4>Your shortened url:</h4>
                 <div class="uk-inline">
                     <label>
                         <input id="output" class="uk-input" type="text" disabled>
                     </label>
                 </div>
-                <span uk-icon="copy" uk-tooltip="Copy to clipboard" onclick="alert('lol')"></span>
+                <span uk-icon="copy" uk-tooltip="Copy to clipboard" onclick="alert($('#output').val())"></span>
             </div>
         </div>
     </div>
@@ -76,7 +86,27 @@
 
     {{{ components.scripts }}}
 
+    <!-- set global variables -->
+    <script type="text/javascript">
+        const prop = {
+            key: {
+                regex: /^({{ key.regex }})$/,
+                random: '{{ key.random }}'
+            },
+            debug: Boolean('{{ debug }}')
+        }
+        // print debug information
+        if (prop.debug)
+            console.log(JSON.stringify(prop))
+    </script>
+
+    <!-- recaptcha v2 -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- additional uikit icons -->
+    <script type="text/javascript" src="js/uikit-icons.min.js"></script>
+    <!-- alertify framework -->
+    <script type="text/javascript" src="js/alertify.min.js"></script>
+    <!-- main page script -->
     <script type="text/javascript" src="js/app/index.js"></script>
 
     </body>

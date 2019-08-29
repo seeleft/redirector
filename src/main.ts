@@ -155,7 +155,7 @@ DatabaseFactory.of(config.database.type, config.database.uri, config.database.op
         const key: string = request.params.key
         const location: string = request.body.location
         if (!key)
-            result(response, new Error('Missing key in path.'))
+            result(response, new Error('Missing key in request path.'))
         else if (!location)
             result(response, new Error('Missing location parameter in request body.'))
         else {
@@ -201,8 +201,11 @@ DatabaseFactory.of(config.database.type, config.database.uri, config.database.op
     application.get('/', (request, response) =>
         // render the response
         templates.render('index', response, {
-            // random key
-            key: StringUtil.createKey(),
+            // key properties
+            key: {
+                regex: config.database.key,
+                random: StringUtil.createKey()
+            },
             // recaptcha site key
             'site-key': config.recaptcha['site-key']
         })
