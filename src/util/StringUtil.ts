@@ -23,13 +23,13 @@
 
 import RandExp from 'randexp'
 import {config} from '../main'
-import {URL} from 'url'
 import FileSystem, {PathLike} from 'fs'
 
 export default class StringUtil {
 
     private static KEY_REGEX?: RegExp
 
+    // noinspection JSUnusedLocalSymbols
     private constructor() {
         // prevent instantiaton
     }
@@ -41,21 +41,17 @@ export default class StringUtil {
     }
 
     static init = (): void => {
-        StringUtil.KEY_REGEX = new RegExp(config.database.key)
+        StringUtil.KEY_REGEX = new RegExp(`^(${config.database.key})$`)
     }
 
     static createKey = (): string => new RandExp(StringUtil.keyRegex()).gen()
 
     static checkKey = (key: string): boolean => StringUtil.keyRegex().test(key)
 
-    static checkUrl = (url: string): boolean => {
-        try {
-            new URL(url)
-            return true
-        } catch (error) {
-            return false
-        }
-    }
+    // noinspection RegExpRedundantEscape
+    // adopted from: http://stackoverflow.com/questions/1303872/ddg#8317014
+    static checkUrl = (url: string): boolean => /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/.test(url)
+
 
     static fromFile = (path: PathLike): string => FileSystem.readFileSync(path, 'UTF-8')
 

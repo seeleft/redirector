@@ -41,7 +41,7 @@ import CaptchaService from './util/CaptchaService'
 export const args: Map<string, any> = new Map()
 
 // parse argv arguments
-Lodash.filter(process.argv).map(arg => arg.trim()).filter(arg => arg.startsWith('--')).map(arg => arg = arg.replace('--', '')).filter(arg => /[A-Z=-]/i.test(arg)).forEach(arg => {
+Lodash.filter(process.argv).map(arg => arg.trim()).filter(arg => arg.startsWith('--')).map(arg => arg.replace('--', '')).filter(arg => /[A-Z=-]/i.test(arg)).forEach(arg => {
     if (!arg.includes('=') || arg.endsWith('='))
         args.set(arg, true)
     else {

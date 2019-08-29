@@ -47,6 +47,7 @@ export default class Redirect {
      *
      * @param location - the location (url) of the redirect
      * @param key - the key of the redirect (will be randomized if unset)
+     * @param instant - should the redirect happen instantly?
      *
      * @returns an instance of a redirect
      *
@@ -58,7 +59,7 @@ export default class Redirect {
             key = StringUtil.createKey()
         // validate key against regex
         else if (!StringUtil.checkKey(key))
-            throw new Error(`Key '${key}' contains illegal characters or does not match the required length.`)
+            throw new Error(`Key "${key}" is invalid.`)
         // validate url
         if (!StringUtil.checkUrl(location))
             throw new Error(`Invalid url: ${location}`)

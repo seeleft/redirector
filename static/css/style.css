@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 /* import roboto font */
 /* noinspection CssUnknownTarget ,CssInvalidImport*/
 @import url('https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap');
@@ -31,6 +30,10 @@ h1, h2, h3, h4, h5, h6, p {
     font-family: 'Roboto Condensed', sans-serif;
 }
 
+/**
+ * Main page container optimization for particles.js framework
+ * adopted from https://github.com/VincentGarreau/particles.js/blob/master/demo/js/app.js
+ */
 #container {
     width: 100%;
     height: 100%;
@@ -40,20 +43,13 @@ h1, h2, h3, h4, h5, h6, p {
     background-repeat: no-repeat;
 }
 
-.slft-footer {
+/**
+ * Footer positioning (utilized in /templates/components/footer.html)
+ */
+#slft-footer {
     position: absolute;
     bottom: 0;
     width: 100%;
     line-height: 1.5em;
     text-align: center;
-}
-
-.slft-btn-yellow {
-    color: black;
-    background-color: white;
-}
-
-.slft-btn-yellow:hover {
-    color: white;
-    background-color: black;
 }

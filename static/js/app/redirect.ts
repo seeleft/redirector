@@ -28,6 +28,9 @@ const properties: any = prop
 // rediretion delay in seconds
 let delay: number = (properties.debug ? 120 : 5)
 
+/**
+ * Updates the #timer element and page title
+ */
 const update = (): void => {
     // update countdown
     $('#timer').text(`You're getting redirected in ${(delay !== 1 ? delay : 'one')} second${(delay !== 1 ? 's' : '')}...`)
@@ -41,8 +44,8 @@ const update = (): void => {
 }
 
 $(() => {
-    // run countdown timer every 1000ms (one second)
     update()
+    // run countdown timer every 1000ms (one second)
     const interval = setInterval(() => {
         // check for end of the delay
         if (1 == delay) {

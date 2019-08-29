@@ -4,7 +4,7 @@
   "description": "URL redirection service used by seeleft.de magazine.",
   "main": "dist/src/main.js",
   "scripts": {
-    "dev:copy-static-assets": "copyfiles static/images/*.png static/css/*.css static/js/*.js dist/",
+    "dev:copy-static-assets": "copyfiles static/**/* dist/",
     "dev:watch": "tsc-watch --onSuccess \"run-s dev:copy-static-assets start:debug\"",
     "dev:lint": "echo \"Linting not yet implemented.\"",
     "dev:build": "npm run dev:lint & tsc & npm run dev:copy-static-assets",

@@ -23,8 +23,6 @@
 
 import IDatabase from './IDatabase'
 import MongoDatabaseImpl from './impl/MongoDatabaseImpl'
-import {args} from '../main'
-import DebugDatabaseImpl from './impl/DebugDatabaseImpl'
 
 /*
  * Helper class responsible for instantiating database implementations
@@ -32,6 +30,7 @@ import DebugDatabaseImpl from './impl/DebugDatabaseImpl'
 export default class DatabaseFactory {
 
     // prevent instantiaton
+    // noinspection JSUnusedLocalSymbols
     private constructor() {
     }
 
@@ -45,14 +44,10 @@ export default class DatabaseFactory {
      * @returns a promise which's result will be the instance of the database
      */
     static of(type: string, uri: string, options: any): Promise<IDatabase> {
-        if (args.get('debug'))
-            type = 'debug'
+        // noinspection JSRedundantSwitchStatement
         switch (type.toLowerCase()) {
             case 'mongodb':
                 return new MongoDatabaseImpl().connect(uri, options)
-            case 'debug':
-                // uri and options are ignored here!!
-                return new DebugDatabaseImpl().connect(uri, options)
             default:
                 throw new Error(`Unknown database type '${type}'.`)
         }

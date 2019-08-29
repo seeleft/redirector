@@ -78,15 +78,13 @@ export default class MongoDatabaseImpl implements IDatabase {
             reject(new Error('Database initialization error.'))
         else {
             const collection: Collection = this.collection
-            collection.findOneAndReplace({_key: {$eq: redirect.key()}}, redirect.toJson(), (error, result) => {
-                if (error)
-                    reject(error)
-                else if (result.lastErrorObject.updatedExisting)
-                    resolve()
-                else collection.insertOne(redirect.toJson(), error => {
+            collection.findOne({_key: {$eq: redirect.key()}}, (error, document) => {
+                if (error || !document)
+                    collection.insertOne(redirect.toJson(), error => {
                         if (error) reject(error)
                         else resolve()
                     })
+                else reject(new Error('Redirect already existing.'))
             })
         }
     })

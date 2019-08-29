@@ -25,11 +25,17 @@
 // export properties from js - the idiot way
 const properties: any = prop
 
+/**
+ * Extracts the current key from DOM
+ *
+ * @return string - the current key
+ */
 const key = (): string => {
     const key: JQuery<HTMLInputElement> = $('#key')
     return key.val() || key.prop('placeholder')
 }
 
+/* Updates the #output element (URL representation) */
 const updateOutput = (): void => {
     // get current url
     let location: string = window.location.toString()
@@ -42,6 +48,12 @@ const updateOutput = (): void => {
     $('#output').val(location)
 }
 
+/**
+ * Alertify framework utility method (due to missing typescript types)
+ *
+ * @param success - {@code FALSE} will turn the alert red and {@code TRUE} will turn it green
+ * @param message - the alert message
+ */
 const notify = (success: boolean, message: string): void => {
     // @ts-ignore
     const $alertify: any = alertify
@@ -50,15 +62,22 @@ const notify = (success: boolean, message: string): void => {
     else {
         $alertify.error(message)
         // @ts-ignore
+        // reset google recaptcha (to allow a next try)
         grecaptcha.reset()
     }
 }
 
-const validateUrl = (): void => {
+/* Form validation of the #location element */
+const validateLocation = (): void => {
     const location: JQuery<HTMLInputElement> = $('#location')
     formStatus(location, checkUrl(location.val() as string))
 }
 
+/**
+ * Form validation of the #key element
+ *
+ * @param highlight - should the element be highlighted on successful validation?
+ */
 const validateKey = (highlight: boolean): void => {
     const keyElement: JQuery<HTMLInputElement> = $('#key')
     if (properties.key.regex.test(key())) {
@@ -69,12 +88,30 @@ const validateKey = (highlight: boolean): void => {
     } else formStatus(keyElement, false)
 }
 
+/**
+ * Copies text of the #output element to the clipboard
+ */
+const copy = (): void => {
+    // select output element
+    // noinspection JSDeprecatedSymbols
+    $('#output').select()
+    // execute copy command
+    document.execCommand('copy')
+    // notify the user
+    notify(true, 'Copied to clipboard!')
+}
+
 // noinspection JSUnusedGlobalSymbols
+/**
+ * Submit callback (invoked by recaptcha)
+ *
+ * @param response - the recaptcha response
+ */
 function submit(response?: string): void {
     const location: JQuery<HTMLInputElement> = $('#location')
     if (!location.hasClass('uk-form-success') || $('#key').hasClass('uk-form-danger')) {
         notify(false, 'Fill in the form correctly!')
-        validateUrl()
+        validateLocation()
         validateKey(false)
         return
     }
@@ -94,10 +131,22 @@ function submit(response?: string): void {
     })
 }
 
-// adopted from: http://stackoverflow.com/questions/1303872/ddg#8317014
 // noinspection RegExpRedundantEscape
+/**
+ * Validates an URL
+ * adopted from: http://stackoverflow.com/questions/1303872/ddg#8317014
+ *
+ * @param url - the URL string
+ * @return boolean - will be {@code TRUE} if string is a valid url
+ */
 const checkUrl = (url: string): boolean => /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/.test(url)
 
+/**
+ * Updates a {@link HTMLInputElement}s status (form validation util)
+ *
+ * @param element - the {@link HTMLInputElement} extraced with {@link JQuery}
+ * @param status - {@code FALSE} will turn the element red and {@code TRUE} green
+ */
 const formStatus = (element: JQuery<HTMLInputElement>, status: boolean): void => {
     if (status) {
         if (element.hasClass('uk-form-danger'))
@@ -115,7 +164,7 @@ const formStatus = (element: JQuery<HTMLInputElement>, status: boolean): void =>
 $(() => {
     updateOutput()
     // listen to location input
-    $('#location').on('input propertychange paste', validateUrl)
+    $('#location').on('input propertychange paste', validateLocation)
     // listen to key input change
     $('#key').on('input propertychange paste', () => validateKey(true))
 })
